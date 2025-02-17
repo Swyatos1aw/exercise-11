@@ -1,0 +1,47 @@
+import csv
+
+
+input_file="C:/test/population_ukraine.csv"
+output_file="C:/test/new_population_ukraine.csv"
+
+try:
+   with open(input_file,"r",encoding="utf-8")as csvfile:
+       reader=csv.DictReader(csvfile)
+       for row in reader:
+           print("Рік - Населення України")
+           
+           years=list(range(1991,2020))
+           population_values=[int(row[str(year)] )for year in years ]
+           for year in years:
+               print(f"{year} - {row[str(year)]}")
+  
+           max_population=max(population_values)
+           min_population=min(population_values)
+    
+           max_year=years[population_values.index(  max_population)]
+           min_year=years[population_values.index (min_population)]
+    
+          
+      
+           with open(output_file,"w",encoding="utf-8",newline="")as csvfile2:
+                 fieldnames=["Максимальне значення","Рік максимуму","Мінімальне значення","Рiк мінімуму"]
+                 writer=csv.DictWriter(csvfile2,delimiter=";" ,fieldnames=fieldnames)
+                 writer.writeheader() 
+                 writer.writerow({
+                    "Максимальне значення":max_population,
+                    "Рік максимуму":max_year,
+                    "Мінімальне значення":min_population,
+                    "Рiк мінімуму":min_year
+                     
+                     }) 
+   print(f"Дані записані в {output_file}")
+  
+
+
+except FileNotFoundError:
+   print("Файл не знайдено!")
+   
+except KeyError:
+    print("Помилка: Перевірте формат CSV (відсутні потрібні заголовки).")
+except Exception as e:
+    print(f"Сталася помилка: {e}")
